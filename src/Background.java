@@ -12,7 +12,7 @@ public class Background
 	
 	public void draw(Graphics pen)
 	{
-		pen.drawImage(image, 0, 0, null);
+		pen.drawImage(image, 0, 0, 1080, 720, null);
 	}
 
 }

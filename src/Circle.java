@@ -1,4 +1,5 @@
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
 
 public class Circle
 {
@@ -21,7 +22,7 @@ public class Circle
 	
 	Color fillColor = Color.YELLOW;
 	Color drawColor = Color.BLACK;
-	
+	Rect sprite;
 	
 	public Circle(double x, double y, double r, int A)
 	{
@@ -36,6 +37,7 @@ public class Circle
 		
 		Nx = -uy;
 		Ny =  ux;
+		sprite = new Rect((int)x - (int )r, (int)y - (int )r, (int)r*2, (int)r*2, "images/g_0.jpg");
 	}
 	
 	
@@ -47,6 +49,7 @@ public class Circle
 		pen.setColor(drawColor);
 		pen.drawOval((int)(x-r), (int)(y-r), (int)(2*r), (int)(2*r));		
 		pen.drawLine((int)(x), (int)(y), (int)(x + r * ux), (int)(y + r * uy));
+		sprite.draw(pen);
 	}
 	
 	public void setColor(Color c)
@@ -168,6 +171,8 @@ public class Circle
 	{
 		x += d * ux;
 		y += d * uy;
+		sprite.x += d  * ux;
+		sprite.y += d  * uy;
 	}
 	
 	public void moveBackward(int d)

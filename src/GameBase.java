@@ -123,7 +123,7 @@ public abstract class GameBase extends   Applet
 
 	public void run()
 	{			
-
+		
 		while(true)
 		{
 			

@@ -1,4 +1,4 @@
-public class Lookup
+public class LookUp
 {
 	
 	public static double[] cos = generateCos(); 
