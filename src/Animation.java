@@ -15,11 +15,11 @@ public class Animation
 		image  = new Image[count];
 		
 
-		for(int i = 0; i < count; i++)
+		for(int i = 0; i < count; i++) {
 			
 			image[i] = Toolkit.getDefaultToolkit().getImage(name + i + "." + filetype);
-		
-		
+			System.out.print(name + i +"." + filetype);
+		}
 		this.delay = delay;
 		
 		duration   = delay;
@@ -34,7 +34,7 @@ public class Animation
 		{
 			if(current < image.length-1)  current++;
 			
-			else                          current = 1;
+			else                          current = 0;
 			
 			delay = duration;
 		}

@@ -20,6 +20,9 @@ public class Enemy extends Circle implements Health,Damage  {
 		this.y = y;
 		this.r = r;
 		this.A = A;
+		rect = new Rect((int)x - (int )r, (int)y - (int )r, (int)r*2, (int)r*2);
+		this.sprite = new Sprite((int)x - (int )r, (int)y- (int )r, (int)r*2, (int)r*2, 
+				"sprites/bat/__Bat02", pose, 8, "png", 5);
 	}
 
 
@@ -58,12 +61,14 @@ public class Enemy extends Circle implements Health,Damage  {
 
 	public void draw(Graphics pen)
 	{
-		pen.setColor(fillColor);
-		pen.fillOval((int)(x-r), (int)(y-r), (int)(2*r), (int)(2*r));		
+//		pen.setColor(fillColor);
+//		pen.fillOval((int)(x-r), (int)(y-r), (int)(2*r), (int)(2*r));		
 		
 		pen.setColor(drawColor);
 		pen.drawOval((int)(x-r), (int)(y-r), (int)(2*r), (int)(2*r));		
 		pen.drawLine((int)(x), (int)(y), (int)(x + r * ux), (int)(y + r * uy));
+		rect.draw(pen);
+		this.sprite.draw(pen);
 	}
 	
 }

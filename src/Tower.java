@@ -1,4 +1,6 @@
 import java.awt.Graphics;
+import java.awt.Toolkit;
+import java.awt.*;
 
 public class Tower extends Rect implements Health  {
 
@@ -9,6 +11,7 @@ public class Tower extends Rect implements Health  {
 	int y ;
 	int w ;
 	int h;
+	Image sprite;
 	
 	public Tower( int health , int x , int y, int w, int h) {
 		super(x, y, w, h);
@@ -17,7 +20,7 @@ public class Tower extends Rect implements Health  {
 		this.y = y;
 		this.w = w;
 		this.h = h;
-		
+		this.sprite = Toolkit.getDefaultToolkit().getImage("images/tower.png");
 	}
 
 	
@@ -34,7 +37,7 @@ public class Tower extends Rect implements Health  {
 
 	public void draw(Graphics pen) {
 		
-		pen.drawRect(x, y, w, h);
+		pen.drawImage(sprite, x, y, w, h, null);
 	}
 
 
