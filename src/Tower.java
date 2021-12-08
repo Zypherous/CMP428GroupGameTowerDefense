@@ -4,7 +4,7 @@ import java.awt.*;
 
 public class Tower extends Rect implements Health  {
 
-	
+	Gun gun;
 	int health ;
 	boolean dead = false ; 
 	int x ;
@@ -21,6 +21,7 @@ public class Tower extends Rect implements Health  {
 		this.w = w;
 		this.h = h;
 		this.sprite = Toolkit.getDefaultToolkit().getImage("images/tower.png");
+		this.gun = new Gun(this.x + 64, this.y +128, 50 ,0 );
 	}
 
 	
@@ -38,6 +39,7 @@ public class Tower extends Rect implements Health  {
 	public void draw(Graphics pen) {
 		
 		pen.drawImage(sprite, x, y, w, h, null);
+		gun.draw(pen);
 	}
 
 

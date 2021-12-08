@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class Circle
 {
@@ -41,8 +42,8 @@ public class Circle
 		Ny =  ux;
 		pose = new String[] {"_Fly_00"};
 		rect = new Rect((int)x - (int )r, (int)y - (int )r, (int)r*2, (int)r*2);
-		this.sprite = new Sprite((int)x - (int )r, (int)y- (int )r, (int)r*2, (int)r*2, 
-				"sprites/bat/__Bat02", pose, 8, "png", 5);
+//		this.sprite = new Sprite((int)x - (int )r, (int)y- (int )r, (int)r*2, (int)r*2, 
+//				"sprites/bat/__Bat02", pose, 8, "png", 5);
 	}
 	
 	

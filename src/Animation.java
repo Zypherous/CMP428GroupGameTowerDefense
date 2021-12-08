@@ -18,7 +18,7 @@ public class Animation
 		for(int i = 0; i < count; i++) {
 			
 			image[i] = Toolkit.getDefaultToolkit().getImage(name + i + "." + filetype);
-			System.out.print(name + i +"." + filetype);
+			System.out.println("Line 21 Animation " +name + i +"." + filetype);
 		}
 		this.delay = delay;
 		

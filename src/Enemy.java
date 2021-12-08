@@ -21,8 +21,6 @@ public class Enemy extends Circle implements Health,Damage  {
 		this.r = r;
 		this.A = A;
 		rect = new Rect((int)x - (int )r, (int)y - (int )r, (int)r*2, (int)r*2);
-		this.sprite = new Sprite((int)x - (int )r, (int)y- (int )r, (int)r*2, (int)r*2, 
-				"sprites/bat/__Bat02", pose, 8, "png", 5);
 	}
 
 
