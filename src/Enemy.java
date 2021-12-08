@@ -45,10 +45,6 @@ public class Enemy extends Circle implements Health,Damage  {
 		return dead;
 	}
 	
-   public void takeDamage() {
-		
-		
-	}
 
 	
 	public int getDamage() {
@@ -68,5 +64,20 @@ public class Enemy extends Circle implements Health,Damage  {
 		rect.draw(pen);
 		this.sprite.draw(pen);
 	}
+
+
+
+
+	@Override
+	public void takeDamage(int dmg) {
+		health -= dmg;
+		if(health <= 0) {
+			this.dead = true;
+		}
+	}
+
+
+
+	
 	
 }

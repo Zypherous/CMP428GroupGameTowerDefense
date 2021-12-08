@@ -244,6 +244,8 @@ public class Circle
 		Nx = -uy;
 		Ny =  ux;
 	}
+
+
 	
 
 }

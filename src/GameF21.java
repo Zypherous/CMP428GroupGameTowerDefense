@@ -23,6 +23,8 @@ public class GameF21 extends GameBase{
 	int second = 0;
 	int shotDelay = 10;
 	long currentTime, lastUpdate;
+	int points = 0;
+	int enemiesKilled = 0;
 	
 //	Gun TEST = new Gun (64, 128, 50, 0);
 	
@@ -30,32 +32,7 @@ public class GameF21 extends GameBase{
 		currentTime = lastUpdate = System.currentTimeMillis();
 		rand = new Random();
 		for(int i = 0; i < enemies.length; i++) {
-			int nextEnemy = rand.nextInt(2);
-			if(nextEnemy == 1) {
-				enemies[i] = new Bat(
-						"bat",
-						10,
-						2,
-						5,
-						false,
-						1200,
-						rand.nextInt(1000)%64 * 7,
-						50,
-						50
-						);
-			}else {
-				enemies[i] = new DarkPinkMon(
-						"darkpinkmon",
-						10,
-						7,
-						5,
-						false,
-						1200,
-						rand.nextInt(500-400)+400,
-						25,
-						50
-						);
-			}
+			newEnemy(i);
 		}
 		timer();
 		timer.start();
@@ -74,7 +51,7 @@ public class GameF21 extends GameBase{
 				projectiles[numBullets] = new Projectile(t.gun.x ,
 						t.y + (int)t.gun.r *2 + 20,
 						5,
-						t.gun.A );
+						t.gun.A, 1);
 				
 				numBullets++;
 			}else {
@@ -83,6 +60,20 @@ public class GameF21 extends GameBase{
 		}
 		for(int i = 0; i < numBullets; i++) {
 			projectiles[i].moveForward(15);
+			for(int j = 0; j < enemies.length;j++) {
+				if(projectiles[i].rect.overlaps(enemies[j].rect)) {
+					enemies[j].health--;
+					if(enemies[j].getHealth()<= 0) {
+						enemies[j].takeDamage(projectiles[i].damage);
+					}
+					if(enemies[j].isDead()) {
+						points += enemies[j].points;
+						newEnemy(j);
+						enemiesKilled++;
+						
+					}
+				}
+			}
 		}
 		for(int i =0; i < enemies.length;i++) {
 			if(enemies[i].name.equals("bat")){
@@ -93,33 +84,7 @@ public class GameF21 extends GameBase{
 		}
 		for(int i = 0; i < enemies.length; i++) {
 			if(enemies[i].rect.overlaps(t)) {		
-				int nextEnemy = rand.nextInt(2);
-				if( nextEnemy==1) {
-					enemies[i] = new Bat(
-						"bat",
-						10,
-						2,
-						5,
-						false,
-						1200,
-						rand.nextInt(1000)%64 * 7,
-						50,
-						50
-						);
-				}
-				else {
-					enemies[i] = new DarkPinkMon(
-							"darkpinkmon",
-							10,
-							7,
-							5,
-							false,
-							1200,
-							rand.nextInt(500-400)+400,
-							25,
-							50
-							);
-				}
+				newEnemy(i);
 				health -= enemies[i].getDamage();
 				t.gun.turnTowards(enemies[i].rect);
 				//System.out.println(String.format("RECT[%d] x: %d, y: %d",i, rect[i].getX(),rect[i].getY()));
@@ -142,7 +107,8 @@ public class GameF21 extends GameBase{
 		
 		pen.setColor(Color.GREEN);
 		pen.drawString(String.format("Health: %d", health), 64, 64);
-		pen.drawString(String.format("Time: %d seconds", second), 64*8, 64);
+		pen.drawString(String.format("Time: %d seconds", second), 64*13, 64);
+		pen.drawString(String.format("Killed: %d    Points: %d", enemiesKilled, points), 64*7, 64);
 //		TEST.draw(pen);
 	}	
 	
@@ -156,5 +122,33 @@ public class GameF21 extends GameBase{
 		});
 	}
 	
-	
+	public void newEnemy(int i) {
+		int nextEnemy = rand.nextInt(2);
+		if( nextEnemy==1) {
+			enemies[i] = new Bat(
+				"bat",
+				10,
+				2,
+				2,
+				false,
+				1200,
+				rand.nextInt(1000)%64 * 7,
+				50,
+				50
+				);
+		}
+		else {
+			enemies[i] = new DarkPinkMon(
+					"darkpinkmon",
+					15,
+					7,
+					5,
+					false,
+					1200,
+					rand.nextInt(500-400)+400,
+					25,
+					50
+					);
+		}
+	}
 }
