@@ -25,8 +25,9 @@ public class GameF21 extends GameBase{
 	long currentTime, lastUpdate;
 	int points = 0;
 	int enemiesKilled = 0;
+	int secondsToNextWave = 10;
 	
-//	Gun TEST = new Gun (64, 128, 50, 0);
+	Gun TEST = new Gun (64, 128, 50, 0);
 	
 	public void initialize() {
 		currentTime = lastUpdate = System.currentTimeMillis();
@@ -61,8 +62,9 @@ public class GameF21 extends GameBase{
 		for(int i = 0; i < numBullets; i++) {
 			projectiles[i].moveForward(15);
 			for(int j = 0; j < enemies.length;j++) {
-				if(projectiles[i].rect.overlaps(enemies[j].rect)) {
+				if(projectiles[i].rect.overlaps(enemies[j].rect) && !projectiles[i].hit) {
 					enemies[j].health--;
+					projectiles[i].hit = true;
 					if(enemies[j].getHealth()<= 0) {
 						enemies[j].takeDamage(projectiles[i].damage);
 					}
@@ -98,7 +100,9 @@ public class GameF21 extends GameBase{
 		pen.setFont(font);
 		space.draw(pen);
 		for(int i = 0; i < numBullets; i++) {
-			projectiles[i].draw(pen);
+			if(!projectiles[i].hit) {
+				projectiles[i].draw(pen);
+			}
 		}
 		t.draw(pen);
 		for(int i =0; i < enemies.length;i++) {
@@ -107,9 +111,9 @@ public class GameF21 extends GameBase{
 		
 		pen.setColor(Color.GREEN);
 		pen.drawString(String.format("Health: %d", health), 64, 64);
-		pen.drawString(String.format("Time: %d seconds", second), 64*13, 64);
-		pen.drawString(String.format("Killed: %d    Points: %d", enemiesKilled, points), 64*7, 64);
-//		TEST.draw(pen);
+		pen.drawString(String.format("Time To Next Wave: %d seconds", secondsToNextWave), 64*10, 64);
+		pen.drawString(String.format("Killed: %d    Points: %d", enemiesKilled, points), 64*6, 64);
+		TEST.draw(pen);
 	}	
 	
 	public void timer() {
@@ -117,6 +121,10 @@ public class GameF21 extends GameBase{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				second++;
+				if(secondsToNextWave == 0) {
+					secondsToNextWave = 11;
+				}
+				secondsToNextWave--;
 			}
 
 		});
@@ -127,7 +135,7 @@ public class GameF21 extends GameBase{
 		if( nextEnemy==1) {
 			enemies[i] = new Bat(
 				"bat",
-				10,
+				5,
 				2,
 				2,
 				false,
@@ -140,7 +148,7 @@ public class GameF21 extends GameBase{
 		else {
 			enemies[i] = new DarkPinkMon(
 					"darkpinkmon",
-					15,
+					8,
 					7,
 					5,
 					false,
