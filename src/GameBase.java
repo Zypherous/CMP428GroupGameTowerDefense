@@ -12,6 +12,7 @@ public abstract class GameBase extends   Applet
 {
 	Random rnd = new Random();
 	Button damage = new Button(64, 64*5, 64,64, "images/Sword", new String[] {""}, 1, "png", 10 );
+	Button gunUpgrade = new Button(64, 64*4, 64,64, "images/BULLET", new String[] {""}, 1, "png", 1000 );
 	// Mouse Location
 	int mx = 0;
 	int my = 0;

@@ -18,6 +18,8 @@ public class GameF21 extends GameBase{
 	Line l = new Line(64,7*64,64,9*64);
 	Random rand;
 	Projectile [] projectiles = new Projectile[1000];
+	Projectile [] projectiles1 = new Projectile[1000];
+	Projectile [] projectiles2 = new Projectile[1000];
 	Font font = new Font("Serif", Font.PLAIN, 32);
 	Font font2 = new Font("Serif", Font.PLAIN, 12);
 	static final int BULLETS = 1000;
@@ -30,8 +32,11 @@ public class GameF21 extends GameBase{
 	int enemiesKilled = 0;
 	int secondsToNextWave = 10;
 	int projDmg = 1;
+	Gun TEST = new Gun (64, 128, 50, 0, false);
+	Gun TEST2 = new Gun (64, 512, 50, 0, false);
+	Gun [] guns = new Gun[] {t.gun, TEST, TEST2};
+	int numGuns = 1;
 	
-	Gun TEST = new Gun (64, 128, 50, 0);
 	
 	Rect r = new Rect((int) damage.x, (int)damage.y, (int)damage.w, (int)damage.h);
 	public void initialize() {
@@ -47,17 +52,35 @@ public class GameF21 extends GameBase{
 	
 	public void inGameLoop(){
 //		if(pressing[UP])     c.moveForward(10);
-		if(pressing[RT])     t.gun.turnRight(3);
-		if(pressing[LT])     t.gun.turnLeft(3);
+		for(int i = 0; i < guns.length; i++) {
+			if(pressing[RT]  && guns[i].active)     guns[i].turnRight(3);
+			if(pressing[LT] && guns[i].active)     guns[i].turnLeft(3);
+		}
 
 		if(pressing[SPACE] && currentTime - lastUpdate > (shotDelay*10)) {
 			lastUpdate = currentTime;
 			if(numBullets < BULLETS) {
-				
-				projectiles[numBullets] = new Projectile(t.gun.x ,
-						t.y + (int)t.gun.r *2 + 20,
-						5,
-						t.gun.A, projDmg);
+				for(int i = 0; i < guns.length; i++) {
+					if(guns[i].active) {
+						switch (i){
+						case 0:
+							projectiles[numBullets] = new Projectile(guns[i].x ,
+									guns[i].y + (int)guns[i].r - (int)guns[i].r,
+									5,
+									guns[i].A, projDmg);
+						case 1:
+							projectiles1[numBullets] = new Projectile(guns[i].x ,
+									guns[i].y + (int)guns[i].r - (int)guns[i].r,
+									5,
+									guns[i].A, projDmg);
+						case 2:
+							projectiles2[numBullets] = new Projectile(guns[i].x ,
+									guns[i].y + (int)guns[i].r - (int)guns[i].r,
+									5,
+									guns[i].A, projDmg);
+						}
+					}
+				}
 				
 				numBullets++;
 			}else {
@@ -65,7 +88,33 @@ public class GameF21 extends GameBase{
 			}
 		}
 		for(int i = 0; i < numBullets; i++) {
-			projectiles[i].moveForward(15);
+			projectiles[i].moveForward(10);
+			projectiles1[i].moveForward(10);
+			projectiles2[i].moveForward(10);
+			for(int j = 0; j < enemies.length;j++) {
+				if(projectiles1[i].rect.overlaps(enemies[j].rect) && !projectiles1[i].hit) {
+					enemies[j].takeDamage(projectiles1[i].damage);
+					projectiles1[i].hit = true;
+					if(enemies[j].isDead()) {
+						points += enemies[j].points;
+						newEnemy(j);
+						enemiesKilled++;
+						
+					}
+				}
+			}
+			for(int j = 0; j < enemies.length;j++) {
+				if(projectiles2[i].rect.overlaps(enemies[j].rect) && !projectiles2[i].hit) {
+					enemies[j].takeDamage(projectiles2[i].damage);
+					projectiles2[i].hit = true;
+					if(enemies[j].isDead()) {
+						points += enemies[j].points;
+						newEnemy(j);
+						enemiesKilled++;
+						
+					}
+				}
+			}
 			for(int j = 0; j < enemies.length;j++) {
 				if(projectiles[i].rect.overlaps(enemies[j].rect) && !projectiles[i].hit) {
 					enemies[j].takeDamage(projectiles[i].damage);
@@ -105,12 +154,19 @@ public class GameF21 extends GameBase{
 			if(!projectiles[i].hit) {
 				projectiles[i].draw(pen);
 			}
+			if(!projectiles1[i].hit) {
+				projectiles1[i].draw(pen);
+			}
+			if(!projectiles2[i].hit) {
+				projectiles2[i].draw(pen);
+			}
 		}
 		t.draw(pen);
 		for(int i =0; i < enemies.length;i++) {
 			enemies[i].draw(pen);
 		}
 		damage.draw(pen);
+		gunUpgrade.draw(pen);
 		pen.setColor(Color.GREEN);
 		pen.drawString(String.format("Health: %d", health), 64, 64);
 		pen.drawString(String.format("Next Wave: %d seconds", secondsToNextWave), 64*12, 64);
@@ -119,7 +175,11 @@ public class GameF21 extends GameBase{
 		pen.drawString(String.format("Dmg: %d", projDmg), 64, 64*5 );
 		pen.drawString(String.format("Cost: %d", damage.cost), 64, 64*5 + 24 );
 		pen.drawString(String.format("Level: %d", damage.upgradeLevel), 64, 64*5 + 48 );
-		//		TEST.draw(pen);
+		for(int i = 0; i < guns.length; i++) {
+			if(guns[i].active) {
+				guns[i].draw(pen);
+			}
+		}
 		
 		pen.setColor(Color.RED);
 		r.draw(pen);
@@ -182,6 +242,11 @@ public class GameF21 extends GameBase{
 			damage.cost += damage.cost + 100*damage.upgradeLevel;
 			setProjDmg(damage.upgradeLevel);
 			
+		}
+		if(gunUpgrade.r.contains(mx, my) && numGuns !=3) {
+			guns[numGuns].active = true;
+			points -= gunUpgrade.cost;
+			numGuns++;
 		}
 	}
 	

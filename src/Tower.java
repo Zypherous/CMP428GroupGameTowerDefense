@@ -21,7 +21,7 @@ public class Tower extends Rect implements Health  {
 		this.w = w;
 		this.h = h;
 		this.sprite = Toolkit.getDefaultToolkit().getImage("images/tower.png");
-		this.gun = new Gun(this.x + 64, this.y +128, 50 ,0 );
+		this.gun = new Gun(this.x + 64, this.y +128, 50 ,0, true );
 	}
 
 	
@@ -39,7 +39,7 @@ public class Tower extends Rect implements Health  {
 	public void draw(Graphics pen) {
 		
 		pen.drawImage(sprite, x, y, w, h, null);
-		gun.draw(pen);
+		
 	}
 
 

@@ -4,11 +4,13 @@ import java.awt.*;
 public class Gun extends Circle {
 
 	String[] pose = new String[] {""};
-	public Gun(double x, double y, double r, int A) {
+	boolean active = false;
+	public Gun(double x, double y, double r, int A, boolean active) {
 		super(x, y, r, A);
 		this.sprite = new Sprite((int)x-(int)r, (int)y -(int)r/2, (int)r*2, (int)r,
 				"images/ART_GUN",
 				pose, 2, "png", 10);
+		this.active = active;
 	}
 
 	public void draw(Graphics pen)
