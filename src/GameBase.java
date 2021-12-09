@@ -11,7 +11,7 @@ public abstract class GameBase extends   Applet
                                  MouseMotionListener
 {
 	Random rnd = new Random();
-	
+	Button damage = new Button(64, 64*5, 64,64, "images/Sword", new String[] {""}, 1, "png", 10 );
 	// Mouse Location
 	int mx = 0;
 	int my = 0;
@@ -176,12 +176,12 @@ public abstract class GameBase extends   Applet
 
 		mouseReleased();
 	}
-	
+	@Override
 	public void mouseClicked(MouseEvent e)
 	{
 		mx = e.getX();
 		my = e.getY();
-		
+	
 		mouseClicked();
 	}
 		

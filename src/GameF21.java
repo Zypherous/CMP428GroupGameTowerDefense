@@ -3,6 +3,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.util.Random;
 
 import javax.swing.Timer;
@@ -17,6 +18,8 @@ public class GameF21 extends GameBase{
 	Line l = new Line(64,7*64,64,9*64);
 	Random rand;
 	Projectile [] projectiles = new Projectile[1000];
+	Font font = new Font("Serif", Font.PLAIN, 32);
+	Font font2 = new Font("Serif", Font.PLAIN, 12);
 	static final int BULLETS = 1000;
 	int numBullets = 0;
 	int health = 100;
@@ -26,9 +29,11 @@ public class GameF21 extends GameBase{
 	int points = 0;
 	int enemiesKilled = 0;
 	int secondsToNextWave = 10;
+	int projDmg = 1;
 	
 	Gun TEST = new Gun (64, 128, 50, 0);
 	
+	Rect r = new Rect((int) damage.x, (int)damage.y, (int)damage.w, (int)damage.h);
 	public void initialize() {
 		currentTime = lastUpdate = System.currentTimeMillis();
 		rand = new Random();
@@ -44,7 +49,7 @@ public class GameF21 extends GameBase{
 //		if(pressing[UP])     c.moveForward(10);
 		if(pressing[RT])     t.gun.turnRight(3);
 		if(pressing[LT])     t.gun.turnLeft(3);
-		
+
 		if(pressing[SPACE] && currentTime - lastUpdate > (shotDelay*10)) {
 			lastUpdate = currentTime;
 			if(numBullets < BULLETS) {
@@ -52,7 +57,7 @@ public class GameF21 extends GameBase{
 				projectiles[numBullets] = new Projectile(t.gun.x ,
 						t.y + (int)t.gun.r *2 + 20,
 						5,
-						t.gun.A, 1);
+						t.gun.A, projDmg);
 				
 				numBullets++;
 			}else {
@@ -63,11 +68,8 @@ public class GameF21 extends GameBase{
 			projectiles[i].moveForward(15);
 			for(int j = 0; j < enemies.length;j++) {
 				if(projectiles[i].rect.overlaps(enemies[j].rect) && !projectiles[i].hit) {
-					enemies[j].health--;
+					enemies[j].takeDamage(projectiles[i].damage);
 					projectiles[i].hit = true;
-					if(enemies[j].getHealth()<= 0) {
-						enemies[j].takeDamage(projectiles[i].damage);
-					}
 					if(enemies[j].isDead()) {
 						points += enemies[j].points;
 						newEnemy(j);
@@ -96,7 +98,7 @@ public class GameF21 extends GameBase{
 		currentTime = System.currentTimeMillis();
 	}	
 	public void paint(Graphics pen){
-		Font font = new Font("Serif", Font.PLAIN, 32);
+		
 		pen.setFont(font);
 		space.draw(pen);
 		for(int i = 0; i < numBullets; i++) {
@@ -108,12 +110,20 @@ public class GameF21 extends GameBase{
 		for(int i =0; i < enemies.length;i++) {
 			enemies[i].draw(pen);
 		}
-		
+		damage.draw(pen);
 		pen.setColor(Color.GREEN);
 		pen.drawString(String.format("Health: %d", health), 64, 64);
-		pen.drawString(String.format("Time To Next Wave: %d seconds", secondsToNextWave), 64*10, 64);
+		pen.drawString(String.format("Next Wave: %d seconds", secondsToNextWave), 64*12, 64);
 		pen.drawString(String.format("Killed: %d    Points: %d", enemiesKilled, points), 64*6, 64);
-		TEST.draw(pen);
+		pen.setFont(font2);
+		pen.drawString(String.format("Dmg: %d", projDmg), 64, 64*5 );
+		pen.drawString(String.format("Cost: %d", damage.cost), 64, 64*5 + 24 );
+		pen.drawString(String.format("Level: %d", damage.upgradeLevel), 64, 64*5 + 48 );
+		//		TEST.draw(pen);
+		
+		pen.setColor(Color.RED);
+		r.draw(pen);
+		
 	}	
 	
 	public void timer() {
@@ -150,7 +160,7 @@ public class GameF21 extends GameBase{
 					"darkpinkmon",
 					8,
 					7,
-					5,
+					50,
 					false,
 					1200,
 					rand.nextInt(500-400)+400,
@@ -158,5 +168,24 @@ public class GameF21 extends GameBase{
 					50
 					);
 		}
+	}
+	
+	@Override
+	public void mouseClicked(MouseEvent e)
+	{
+		mx = e.getX();
+		my = e.getY();
+		
+		if(damage.r.contains(mx, my) && points >= damage.cost) {
+			points -= damage.cost;
+			damage.upgradeLevel++;
+			damage.cost += damage.cost + 100*damage.upgradeLevel;
+			setProjDmg(damage.upgradeLevel);
+			
+		}
+	}
+	
+	public void setProjDmg(int dmg) {
+		projDmg += dmg*2;
 	}
 }
