@@ -4,7 +4,7 @@ import java.awt.*;
 public class Gun extends Circle {
 
 	String[] pose = new String[] {""};
-	boolean active = false;
+	private boolean active;
 	public Gun(double x, double y, double r, int A, boolean active) {
 		super(x, y, r, A);
 		this.sprite = new Sprite((int)x-(int)r, (int)y -(int)r/2, (int)r*2, (int)r,
@@ -37,4 +37,11 @@ public class Gun extends Circle {
         if(distanceLeftRight(e.x + e.w , e.y + e.h) < 1)  turnLeft(6);
         if(distanceLeftRight(e.x + e.w ,e.y + e.h) > 1)  turnRight(6);
      }
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+	public boolean getActive() {
+		return this.active;
+	}
 }
