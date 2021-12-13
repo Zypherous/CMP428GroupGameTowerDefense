@@ -6,9 +6,10 @@ public class Enemy extends Circle implements Health,Damage  {
 	int health;
 	int damage;
 	int points;
+	int speed;
 	boolean dead;
 	
-	public Enemy(String name, int health, int damage, int points, boolean dead ,double x, double y, double r, int A) {
+	public Enemy(String name, int health, int damage, int points, boolean dead ,double x, double y, double r, int A, int speed) {
 		super(x,y,r,A);
 		this.name = name;
 		this.health = health;
@@ -20,6 +21,7 @@ public class Enemy extends Circle implements Health,Damage  {
 		this.y = y;
 		this.r = r;
 		this.A = A;
+		this.speed = speed;
 		rect = new Rect((int)x - (int )r, (int)y - (int )r, (int)r*2, (int)r*2);
 	}
 

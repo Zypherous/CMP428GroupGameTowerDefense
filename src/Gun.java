@@ -4,8 +4,10 @@ import java.awt.*;
 public class Gun extends Circle {
 
 	String[] pose = new String[] {""};
+	Projectile [] projectiles = new Projectile[1000];
+	GameF21 game;
 	private boolean active;
-	public Gun(double x, double y, double r, int A, boolean active) {
+	public Gun(double x, double y, double r, int A, boolean active, GameF21 game) {
 		super(x, y, r, A);
 		this.sprite = new Sprite((int)x-(int)r, (int)y -(int)r/2, (int)r*2, (int)r,
 				"images/ART_GUN",
@@ -43,5 +45,12 @@ public class Gun extends Circle {
 	}
 	public boolean getActive() {
 		return this.active;
+	}
+	
+	public void fire() {
+		projectiles[game.numBullets] = new Projectile(this.x ,
+				this.y,
+				5,
+				this.A, game.projDmg);
 	}
 }

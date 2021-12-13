@@ -12,9 +12,8 @@ public class Projectile extends Circle{
 		this.damage = dmg;
 	}
 	
-	public void shoot(int x, int y) {
-		this.x += x;
-		this.y += y;
+	public void shoot() {
+		this.moveForward(8);
 	}
 
 }

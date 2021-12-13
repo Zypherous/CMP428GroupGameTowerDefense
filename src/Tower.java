@@ -17,17 +17,18 @@ public class Tower extends Rect implements Health  {
 	Image sprite;
 	int numGuns = 1;
 	
-	public Tower( int health , int x , int y, int w, int h) {
+	public Tower( int health , int x , int y, int w, int h, GameF21 game) {
 		super(x, y, w, h);
 		this.health = health;
 		this.x = x;
 		this.y = y;
 		this.w = w;
 		this.h = h;
+		this.game = game;
 		this.sprite = Toolkit.getDefaultToolkit().getImage("images/tower.png");
-		this.gun = new Gun(this.x + 64, this.y +128, 50 ,0, true );
-		this.gun2 = new Gun (this.x + 64, this.y +64, 50 ,0, false);
-		this.gun3 = new Gun (this.x + 64, this.y +128, 50 ,0, false);
+		this.gun = new Gun(this.x + 64, this.y +128, 50 ,0, true , game);
+		this.gun2 = new Gun (this.x + 64, this.y +64, 50 ,0, false, game);
+		this.gun3 = new Gun (this.x + 64, this.y +128, 50 ,0, false, game);
 		this.guns = new Gun[] {gun, gun2, gun3};
 		System.out.print(guns[0].getActive());
 	}

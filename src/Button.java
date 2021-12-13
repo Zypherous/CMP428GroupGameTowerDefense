@@ -27,18 +27,19 @@ public class Button extends Sprite{
 		pen.setFont(font);
 		pen.setColor(Color.BLUE);
 		pen.drawImage(animation[0].currentImage(), (int)x, (int)y, 64, 64, null);
-		if(this.type.equals("UpgradeDamage")){
-				pen.drawString(String.format("Current Damage: %d", game.projDmg), (int)this.x + this.w +1, (int)this.y + 12*3 );
+		if(!this.type.equals("startButton")) {
+			if(this.type.equals("UpgradeDamage")){
+					pen.drawString(String.format("Current Damage: %d", game.projDmg), (int)this.x + this.w +1, (int)this.y + 12*3 );
+			}
+			if(this.type.equals("MoreGuns")) {
+				pen.drawString(String.format("Numvber of Guns: %d", game.t.numGuns), (int)this.x + this.w +1, (int)this.y + 12*3 );			
+			}
+			if(this.type.equals("ShotDelay")) {
+				pen.drawString(String.format("Shot Delay: %d", game.shotDelay), (int)this.x + this.w +1, (int)this.y + 12*3 );						
+			}
+			pen.drawString(String.format("Cost: %d", this.cost), (int)this.x + this.w +1, (int)this.y + 12*4 );
+			pen.drawString(String.format("Level: %d", this.upgradeLevel), (int)this.x + this.w +1, (int)this.y + 12*5  );
 		}
-		if(this.type.equals("MoreGuns")) {
-			pen.drawString(String.format("Numvber of Guns: %d", game.t.numGuns), (int)this.x + this.w +1, (int)this.y + 12*3 );			
-		}
-		if(this.type.equals("ShotDelay")) {
-			pen.drawString(String.format("Shot Delay: %d", game.shotDelay), (int)this.x + this.w +1, (int)this.y + 12*3 );						
-		}
-		pen.drawString(String.format("Cost: %d", this.cost), (int)this.x + this.w +1, (int)this.y + 12*4 );
-		pen.drawString(String.format("Level: %d", this.upgradeLevel), (int)this.x + this.w +1, (int)this.y + 12*5  );
-		
 	}
 
 }
