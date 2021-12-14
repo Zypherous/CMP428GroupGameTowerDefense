@@ -69,7 +69,7 @@ public class GameF21 extends GameBase{
 				if(pressing[LT] && t.guns[i].getActive())     t.guns[i].turnLeft(3);
 			}
 	
-			if(pressing[SPACE] && currentTime - lastUpdate > (shotDelay*10)) {
+			if(/*pressing[SPACE] &&*/ currentTime - lastUpdate > (shotDelay*10) && !enemiess.isEmpty()) {
 				lastUpdate = currentTime;
 					for(int i = 0; i < t.guns.length; i++) {
 						if(t.guns[i].getActive()) {
