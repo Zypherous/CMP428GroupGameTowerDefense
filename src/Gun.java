@@ -7,9 +7,11 @@ public class Gun extends Circle {
 	Projectile [] projectiles = new Projectile[1000];
 	GameF21 game;
 	private boolean active;
+	private int numBullets;
 	public Gun(double x, double y, double r, int A, boolean active, GameF21 game) {
 		super(x, y, r, A);
 		this.game = game;
+		this.numBullets = 0;
 		this.sprite = new Sprite((int)x-(int)r, (int)y -(int)r/2, (int)r*2, (int)r,
 				"images/ART_GUN",
 				pose, 2, "png", 10);
@@ -48,11 +50,21 @@ public class Gun extends Circle {
 	public boolean getActive() {
 		return this.active;
 	}
-	
-	public void fire(int bulletNum) {
-		projectiles[bulletNum] = new Projectile(this.x ,
+	public int getNumBullets() {
+		return this.numBullets;
+	}
+	public void setNumBullets(int numBullets) {
+		this.numBullets = numBullets;
+	}
+	public void fire() {
+		projectiles[numBullets] = new Projectile(this.x ,
 				this.y,
 				5,
 				this.A, game.projDmg);
+		if(numBullets < game.BULLETS) {
+			numBullets++;
+		}else {
+			numBullets = 0;
+		}
 	}
 }

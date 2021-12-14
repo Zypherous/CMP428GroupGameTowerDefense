@@ -19,27 +19,30 @@ public class GameF21 extends GameBase{
 	Stage stage;
 	Circle c = new Circle(540,360,50,50);
 	Tower t = new Tower(20, 40,6* 64, 239/2, 486/2, this);
-	Enemy [] enemies = new Enemy[5];
 	Line l = new Line(40,7*64,64,9*64);
 	Random rand;
-	Font font = new Font("Serif", Font.PLAIN, 32);
+	Font font = new Font("Serif", Font.BOLD, 24);
 	List<Enemy> enemiess;
 	List<Enemy> copyOfEnemies;
 	Button damage = new Button(64, 64*2, 64,64, "images/Sword", new String[] {""}, 1, "png", 10, this , "UpgradeDamage");
 	Button gunUpgrade = new Button(64, 64*4, 64,64, "images/ART_GUN", new String[] {""}, 1, "png", 1000, this, "MoreGuns" );
 	Button startButton;
+	
 	static final int BULLETS = 1000;
-	int numBullets = 0;
-	int health;
+
+	
+	int stageNum;
+	int numStage;
 	int second = 0;
 	int shotDelay = 30;
 	long currentTime, lastUpdate;
 	int points = 100000;
 	int enemiesKilled = 0;
-	int secondsToNextWave = 10;
+	int secondsToNextWave = 0;
 	int projDmg = 1;
 	int waveNum;
 	boolean start = false;
+	boolean newGame = true;
 	
 	public void initialize() {
 		startButton = new Button(1080/2 -64, 300 -64, 64, 64, "images/Start-Button", new String[] {""}, 1, "png", 0, this, "startButton" );
@@ -48,20 +51,19 @@ public class GameF21 extends GameBase{
 		currentTime = lastUpdate = System.currentTimeMillis();
 		rand = new Random();
 		splash = new Splash(new Background("images/splash.png"), this);
-		this.health = t.getHealth();
 		timer();
-		
-		stage = new Stage(1, new Background("images/Grass_field.jpeg"), 15, 4, this);
+		this.stageNum = 1;
+		stage = new Stage(1, new Background("images/stage1.jpg"), 3, 4, this);
 		stage.setStage();
+		
+		this.numStage = 2;
 		this.waveNum = 1;
 	}	
 	
 	
 	public void inGameLoop(){
 		if(start) {
-			
 			timer.start();
-	//		if(pressing[UP])     c.moveForward(10);
 			for(int i = 0; i < t.guns.length; i++) {
 				if(pressing[RT]  && t.guns[i].getActive())     t.guns[i].turnRight(3);
 				if(pressing[LT] && t.guns[i].getActive())     t.guns[i].turnLeft(3);
@@ -69,68 +71,64 @@ public class GameF21 extends GameBase{
 	
 			if(pressing[SPACE] && currentTime - lastUpdate > (shotDelay*10)) {
 				lastUpdate = currentTime;
-				if(numBullets < BULLETS) {
 					for(int i = 0; i < t.guns.length; i++) {
 						if(t.guns[i].getActive()) {
-							t.guns[i].fire(numBullets);
+							t.guns[i].fire();
 							}
 						}
 					
-					numBullets++;
-				}else {
-					numBullets = 0;
-				}
+
 			}
-			for(int i = 0; i < numBullets; i++) {
+			
 				for(int j = 0; j < t.numGuns; j++) {
 					if(t.guns[j].getActive()) {
-						t.guns[j].projectiles[i].shoot();
+						for(int i = 0; i < t.guns[j].getNumBullets(); i++) {
+							t.guns[j].projectiles[i].shoot();
+						}
 					}
 				}
-				}
+				
 			if(!enemiess.isEmpty()) {	
 				sortEnemiesByX();
-
 				updateEnemies();
-//				enemiess.forEach(enemy-> {
-//					if(enemy.rect.overlaps(t)) {		
-//						t.health -= enemy.getDamage();
-//						if(t.isDead()) {
-//							t.destroy();
-//						}
-//						enemiess.remove(enemy);
-//					}
-//				});
-				
 			//Auto aim
-//				t.gun.turnTowards(enemiess.get(0));
+				for(int i = 0; i < t.guns.length; i++) {
+					if(t.guns[i].getActive() && !enemiess.isEmpty()) {
+						t.guns[i].turnTowards(enemiess.get(0));
+					}
+				}
 			}
-		}else {
-			start = false;
 		}
+		
+			
 
 			currentTime = System.currentTimeMillis();
 			if(t.isDead()) {
-				t.destroy();
-				this.start = false;
-				enemiess.clear();
-				stage.setStage();
-				stage.loadWave(1);
-				t.reset();
 				timer.stop();
+				t.destroy();
+				newGame = true;
+				start = false;
+				enemiess.clear();
+				this.stageNum = 1;
+				newStage();
+				t.reset();
+				this.points = 100000;
 				timer();
 			}
 	}
 		
 	public void paint(Graphics pen){
+		if(!start && !newGame) {
+			pen.setColor(Color.black);
+	        pen.fillRect(0,0,1080,720);
+		}
 		
-		pen.setFont(font);
 		if(start) {
 			stage.getBgImg().draw(pen);
 			t.draw(pen);
 			for(Gun gun : t.guns) {
 				if(gun.getActive()) {
-					for(int i = 0; i < numBullets; i++) {
+					for(int i = 0; i < gun.getNumBullets(); i++) {
 						if(!gun.projectiles[i].hit) {
 							gun.projectiles[i].draw(pen);
 						}
@@ -140,38 +138,69 @@ public class GameF21 extends GameBase{
 			drawEnemies(pen);
 			damage.draw(pen);
 			gunUpgrade.draw(pen);
-			pen.setColor(Color.BLACK);
+			pen.setFont(font);
+			pen.setColor(Color.RED);
 			pen.drawString(String.format("Health: %d", t.health), 64, 64);
-			pen.drawString(String.format("Next Wave: %d seconds", secondsToNextWave), 64*12, 64);
-			pen.drawString(String.format("Killed: %d    Points: %d", enemiesKilled, points), 64*6, 64);
+			if(waveNum == this.stage.getNumWaves()) {
+				pen.drawString(String.format("Wave Number: %d Next Wave: ------",waveNum), 64*10, 64);
+				
+			}else {
+				pen.drawString(String.format("Wave Number: %d Next Wave: %d seconds",waveNum, secondsToNextWave), 64*10, 64);
+			}
+			pen.drawString(String.format("Killed: %d  Points: %d", enemiesKilled, points), 64*6, 64);
 		}
+			
 		else {
-			splash.draw(pen);
+			if(newGame) {
+				splash.draw(pen);
+			}
 			startButton.draw(pen);
 		}
 	}	
 	
 	public void timer() {
+		
 		timer = new Timer(1000, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				second++;
+				
 				if(secondsToNextWave <= 0 && waveNum < stage.getNumWaves()) {
-					waveNum++;
+					
 					if(waveNum < stage.getNumWaves())
 					{
+						System.out.println(String.format("Line 212 GameF21: Wave number %d loaded", waveNum +1));
 						stage.loadWave(waveNum);
+						waveNum++;
 						secondsToNextWave = stage.getTimeBetweenWaves();
 					}
-				}else {
+				}
+				if(stageNum < numStage && stage.getNumWaves() == waveNum && enemiess.isEmpty()) {
+					newGame = false;
+					stageNum++;
+					newStage();
 					timer.stop();
+
 				}
 				secondsToNextWave--;
+				if(secondsToNextWave < 0) {
+					secondsToNextWave = 0;
+				}
 			}
+
 
 		});
 	}
 	
+	private void newStage() {
+		start = false;
+		stage = new Stage(stageNum, new Background("images/stage"+ stageNum +".jpg"), 10, 4, this);
+		stage.setStage();
+		
+		System.out.println(String.format("Line 196 GameF21: Wave number %d loaded", waveNum ));
+		this.secondsToNextWave = stage.getTimeBetweenWaves();
+		timer();
+	}
 
 	@Override
 	public void mouseClicked(MouseEvent e)
@@ -214,7 +243,7 @@ public class GameF21 extends GameBase{
 		}
 		for(int i = 0; i < enemiess.size(); i++) {
 			for(Gun gun: t.guns) {
-				for(int bullet= 0; bullet< numBullets; bullet++) {
+				for(int bullet = 0; bullet< gun.getNumBullets(); bullet++) {
 					if(gun.getActive() && gun.projectiles[bullet].rect.overlaps(enemiess.get(i).rect) && !gun.projectiles[bullet].hit) {
 						enemiess.get(i).takeDamage(gun.projectiles[bullet].damage);
 								gun.projectiles[bullet].hit = true;

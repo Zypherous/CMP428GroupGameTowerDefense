@@ -81,5 +81,7 @@ public class Tower extends Rect implements Health  {
 		this.sprite = Toolkit.getDefaultToolkit().getImage("images/tower.png");
 		this.health = 20;
 		this.guns[0].setActive(true);
+		this.dead = false;
+		
 	}
 }

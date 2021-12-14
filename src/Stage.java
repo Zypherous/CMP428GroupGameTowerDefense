@@ -20,9 +20,10 @@ public  class Stage {
 		game.secondsToNextWave = timeBetweenWaves;
 		setWaves();
 		loadWave(1);
+		game.waveNum =1;
 	}
 	public void loadWave(int waveNum) {
-		for(int i = 0; i < waves[waveNum-1].getEnemies().length; i ++) {
+		for(int i = 0; i < waves[waveNum].getEnemies().length; i ++) {
 			game.enemiess.add(waves[waveNum].getEnemies()[i]);
 		}
 	}
