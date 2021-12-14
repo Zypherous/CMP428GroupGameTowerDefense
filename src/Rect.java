@@ -5,13 +5,19 @@ import java.awt.*;
 
 public class Rect
 {
-	int x;
-	int y;
+//	int x;
+//	int y;
 	
-	int w;
-	int h;
+	double x;
+	double y;
 	
-	Color color = Color.BLACK;
+//	int w;
+//	int h;
+	
+	double h;
+	double w;
+	
+	Color color = Color.RED;
 	
 	Image image;
 	
@@ -35,7 +41,11 @@ public class Rect
 	    setColor(color);
 	}
 
-	public Rect(int x, int y, int w, int h, String filename)
+	public Rect(double x,
+				double y,
+				double w,
+				double h,
+				String filename)
 	{
 		this.x = x;
 		this.y = y;
@@ -108,16 +118,17 @@ public class Rect
 		this.color = color;
 	}
 	
-	public int respawnPoint(Rect r) {
-		
-		return this.x = r.x;
-	}
+//	public int respawnPoint(Rect r) {
+//		
+//		return this.x = r.x;
+//	}
+	
 	public void draw(Graphics pen)
 	{
 		pen.setColor(color);
 		
-		pen.drawRect(x, y, w, h);
+		pen.drawRect((int)x,(int) y,(int) w,(int) h);
 		
-		pen.drawImage(image, this.x, this.y, null);
+		pen.drawImage(image,(int) this.x, (int)this.y, (int)this.w, (int)this.h,  null);
 	}
 }

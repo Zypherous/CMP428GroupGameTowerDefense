@@ -123,7 +123,7 @@ public abstract class GameBase extends   Applet
 
 	public void run()
 	{			
-
+		
 		while(true)
 		{
 			
@@ -176,12 +176,12 @@ public abstract class GameBase extends   Applet
 
 		mouseReleased();
 	}
-	
+	@Override
 	public void mouseClicked(MouseEvent e)
 	{
 		mx = e.getX();
 		my = e.getY();
-		
+	
 		mouseClicked();
 	}
 		

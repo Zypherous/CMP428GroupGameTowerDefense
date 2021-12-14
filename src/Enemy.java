@@ -6,20 +6,25 @@ public class Enemy extends Circle implements Health,Damage  {
 	int health;
 	int damage;
 	int points;
+	int speed;
 	boolean dead;
+	boolean hitTower;
 	
-	public Enemy(String name, int health, int damage, int points, boolean dead ,double x, double y, double r, int A) {
+	public Enemy(String name, int health, int damage, int points, boolean dead ,double x, double y, double r, int A, int speed) {
 		super(x,y,r,A);
 		this.name = name;
 		this.health = health;
 		this.damage = damage;
 		this.points = points;
 		this.dead   = dead;
+		this.hitTower = false;
 		
 		this.x = x;
 		this.y = y;
 		this.r = r;
 		this.A = A;
+		this.speed = speed;
+		rect = new Rect((int)x - (int )r, (int)y - (int )r, (int)r*2, (int)r*2);
 	}
 
 
@@ -35,19 +40,14 @@ public class Enemy extends Circle implements Health,Damage  {
 		
 		return this.health;
 	}
-
 	
 	public boolean isDead() {
 		
-		if(health == 0) dead = true;
+		if(health <= 0) dead = true;
 		
 		return dead;
 	}
 	
-   public void takeDamage() {
-		
-		
-	}
 
 	
 	public int getDamage() {
@@ -58,12 +58,45 @@ public class Enemy extends Circle implements Health,Damage  {
 
 	public void draw(Graphics pen)
 	{
-		pen.setColor(fillColor);
-		pen.fillOval((int)(x-r), (int)(y-r), (int)(2*r), (int)(2*r));		
+//		pen.setColor(fillColor);
+//		pen.fillOval((int)(x-r), (int)(y-r), (int)(2*r), (int)(2*r));		
 		
 		pen.setColor(drawColor);
 		pen.drawOval((int)(x-r), (int)(y-r), (int)(2*r), (int)(2*r));		
 		pen.drawLine((int)(x), (int)(y), (int)(x + r * ux), (int)(y + r * uy));
+		rect.draw(pen);
+		this.sprite.draw(pen);
 	}
+
+
+
+
+	@Override
+	public void takeDamage(int dmg) {
+		health -= dmg;
+		if(health <= 0) {
+			this.dead = true;
+		}
+	}
+
+
+	public int getX() {
+		return (int)this.x;
+	}
+
+
+
+	public boolean isHitTower() {
+		return hitTower;
+	}
+
+
+
+	public void setHitTower(boolean hitTower) {
+		this.hitTower = hitTower;
+	}
+
+	
+	
 	
 }

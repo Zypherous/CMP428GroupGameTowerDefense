@@ -4,7 +4,7 @@ import java.awt.Graphics;
 public interface Damage {
 
 	
-	public abstract void takeDamage(); 
+	public abstract void takeDamage(int dmg); 
 		
 	
 	

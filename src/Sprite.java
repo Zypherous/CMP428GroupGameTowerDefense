@@ -56,17 +56,17 @@ public class Sprite
 	
 	public void draw(Graphics pen)
 	{
-   	   if(moving)
-	
-		   pen.drawImage(animation[action].currentImage(), (int)x, (int)y, null);
-		   
-	   else
+//   	   if(moving)
+//	
+		   pen.drawImage(animation[0].currentImage(), (int)x, (int)y, (int) w, (int) h, null);
+//		   
+//	   else
 
-		   pen.drawImage(animation[action].stillImage(), (int)x, (int)y, null);
+//		   pen.drawImage(animation[0].stillImage(), (int)x, (int)y, null);
 	   
-   	   if(highlighted)   pen.drawRect((int)x, (int)y, w, h);
-   	   
-	   moving = false;
+//   	   if(highlighted)   pen.drawRect((int)x, (int)y, w, h);
+//   	   
+//	   moving = false;
 	}
 	
 	public void setVelocity(double vx, double vy)
@@ -201,4 +201,7 @@ public class Sprite
 	{
 		return selected;
 	}
+	
+	
+	
 }

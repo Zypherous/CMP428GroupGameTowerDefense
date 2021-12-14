@@ -1,4 +1,6 @@
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class Circle
 {
@@ -21,7 +23,9 @@ public class Circle
 	
 	Color fillColor = Color.YELLOW;
 	Color drawColor = Color.BLACK;
-	
+	Rect rect;
+	Sprite sprite;
+	String[] pose;
 	
 	public Circle(double x, double y, double r, int A)
 	{
@@ -36,17 +40,23 @@ public class Circle
 		
 		Nx = -uy;
 		Ny =  ux;
+		pose = new String[] {"_Fly_00"};
+		rect = new Rect((int)x - (int )r, (int)y - (int )r, (int)r*2, (int)r*2);
+//		this.sprite = new Sprite((int)x - (int )r, (int)y- (int )r, (int)r*2, (int)r*2, 
+//				"sprites/bat/__Bat02", pose, 8, "png", 5);
 	}
 	
 	
 	public void draw(Graphics pen)
 	{
-		pen.setColor(fillColor);
-		pen.fillOval((int)(x-r), (int)(y-r), (int)(2*r), (int)(2*r));		
-		
-		pen.setColor(drawColor);
+//		pen.setColor(fillColor);
+//		pen.fillOval((int)(x-r), (int)(y-r), (int)(2*r), (int)(2*r));		
+//		
+//		pen.setColor(drawColor);
 		pen.drawOval((int)(x-r), (int)(y-r), (int)(2*r), (int)(2*r));		
-		pen.drawLine((int)(x), (int)(y), (int)(x + r * ux), (int)(y + r * uy));
+//		pen.drawLine((int)(x), (int)(y), (int)(x + r * ux), (int)(y + r * uy));
+		rect.draw(pen);
+		this.sprite.draw(pen);
 	}
 	
 	public void setColor(Color c)
@@ -91,15 +101,15 @@ public class Circle
 		}
 	}
 	
-	public void chase(Line l)
+	public void chase(Line l, int speed)
 	{
 		
 		//if(distanceInFront(c.x, c.y) >= -10)
 		{
 		   turnTowards(l);
 		
-		   if(distanceInFront(l.Ax, l.By) > r +  l.Ax + 200)		moveForward(4);
-		   if(distanceInFront(l.Ax, l.By) < r +  l.Ax + 200)		moveForward(4);
+		   if(distanceInFront(l.Ax, l.By) > r +  l.Ax + 200)		moveForward(speed);
+		   if(distanceInFront(l.Ax, l.By) < r +  l.Ax + 200)		moveForward(speed);
 		}
 	}
 	
@@ -168,6 +178,10 @@ public class Circle
 	{
 		x += d * ux;
 		y += d * uy;
+		rect.x += d  * ux;
+		sprite.x += d  * ux;
+		rect.y += d  * uy;
+		sprite.y += d  * uy;
 	}
 	
 	public void moveBackward(int d)
@@ -230,6 +244,8 @@ public class Circle
 		Nx = -uy;
 		Ny =  ux;
 	}
+
+
 	
 
 }
