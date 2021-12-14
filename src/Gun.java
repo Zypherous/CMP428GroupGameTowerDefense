@@ -9,10 +9,12 @@ public class Gun extends Circle {
 	private boolean active;
 	public Gun(double x, double y, double r, int A, boolean active, GameF21 game) {
 		super(x, y, r, A);
+		this.game = game;
 		this.sprite = new Sprite((int)x-(int)r, (int)y -(int)r/2, (int)r*2, (int)r,
 				"images/ART_GUN",
 				pose, 2, "png", 10);
 		this.active = active;
+		
 	}
 
 	public void draw(Graphics pen)
@@ -47,8 +49,8 @@ public class Gun extends Circle {
 		return this.active;
 	}
 	
-	public void fire() {
-		projectiles[game.numBullets] = new Projectile(this.x ,
+	public void fire(int bulletNum) {
+		projectiles[bulletNum] = new Projectile(this.x ,
 				this.y,
 				5,
 				this.A, game.projDmg);

@@ -14,6 +14,7 @@ public class Projectile extends Circle{
 	
 	public void shoot() {
 		this.moveForward(8);
+//		System.out.println(String.format("Line 17 Projectile: x: %d, y:%d", (int)this.x,(int)this.y));
 	}
 
 }

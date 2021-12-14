@@ -11,18 +11,18 @@ public  class Stage {
 		this.timeBetweenWaves = timeBetweenWaves;
 		this.stageNum = stageNum;
 		this.bgImg = bgImg;
+		this.numWaves = numWaves;
 		this.waves = new Wave[numWaves];
 		this.game = game;
 	}
 	
 	public void setStage() {
-		
-		game.enemiess.clear();
 		game.secondsToNextWave = timeBetweenWaves;
-		loadWave(0);
+		setWaves();
+		loadWave(1);
 	}
 	public void loadWave(int waveNum) {
-		for(int i = 0; i < waves[waveNum].getEnemies().length; i ++) {
+		for(int i = 0; i < waves[waveNum-1].getEnemies().length; i ++) {
 			game.enemiess.add(waves[waveNum].getEnemies()[i]);
 		}
 	}
@@ -31,9 +31,9 @@ public  class Stage {
 		return waves;
 	}
 
-	public void setWaves(Wave[] waves) {
+	public void setWaves() {
 		for(int i = 0; i < numWaves; i++) {
-			waves[i] = new Wave(i, stageNum);
+			waves[i] = new Wave(i+1, stageNum);
 		}
 	}
 

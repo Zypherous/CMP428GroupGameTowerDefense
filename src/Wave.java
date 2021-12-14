@@ -13,8 +13,8 @@ public class Wave {
 		this.waveNum = waveNum;
 		this.waveName = "wave" + waveNum;
 		this.stageNum = stageNum;
-		setEnemies(load(waveName));
 		rand = new Random();
+		setEnemies(load(waveName));
 		
 	}
 
@@ -38,16 +38,16 @@ public class Wave {
 	public Enemy[] load(String waveName) {
 	
 		Enemy[] enemies;
-        try(BufferedReader bufferedReader = new BufferedReader(new FileReader(("/waves/stage" + stageNum + waveName)))) {
+        try(BufferedReader bufferedReader = new BufferedReader(new FileReader(("waves/stage" + stageNum +"/" + waveName +".txt")))) {
             StringBuilder stringBuilder = new StringBuilder();
             String line;
-            while((line = bufferedReader.readLine()) != null) {
-                stringBuilder.append(line).append("\n");
+            while((line = bufferedReader.readLine() )!= null) {
+              stringBuilder.append(line);
             }
-            String[] tokens = line.split(", ");
+            String[] tokens = stringBuilder.toString().split(", ");
             enemies = new Enemy[Integer.parseInt(tokens[0])];
             for(int i = 0; i < enemies.length; i ++) {
-            	enemies[i] = newEnemy(tokens[i]);
+            	enemies[i] = newEnemy(tokens[i+1]);
             }
             return enemies;
         } catch (IOException e) {
@@ -72,7 +72,7 @@ public class Wave {
 					);
 			}
 		if(name.equals("darkpnkmon")) {
-			new DarkPinkMon(
+			return new DarkPinkMon(
 					"darkpnkmon",
 					20,
 					15,

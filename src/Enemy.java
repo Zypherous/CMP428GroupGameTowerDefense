@@ -8,6 +8,7 @@ public class Enemy extends Circle implements Health,Damage  {
 	int points;
 	int speed;
 	boolean dead;
+	boolean hitTower;
 	
 	public Enemy(String name, int health, int damage, int points, boolean dead ,double x, double y, double r, int A, int speed) {
 		super(x,y,r,A);
@@ -16,6 +17,7 @@ public class Enemy extends Circle implements Health,Damage  {
 		this.damage = damage;
 		this.points = points;
 		this.dead   = dead;
+		this.hitTower = false;
 		
 		this.x = x;
 		this.y = y;
@@ -38,11 +40,10 @@ public class Enemy extends Circle implements Health,Damage  {
 		
 		return this.health;
 	}
-
 	
 	public boolean isDead() {
 		
-		if(health == 0) dead = true;
+		if(health <= 0) dead = true;
 		
 		return dead;
 	}
@@ -79,7 +80,23 @@ public class Enemy extends Circle implements Health,Damage  {
 	}
 
 
+	public int getX() {
+		return (int)this.x;
+	}
 
+
+
+	public boolean isHitTower() {
+		return hitTower;
+	}
+
+
+
+	public void setHitTower(boolean hitTower) {
+		this.hitTower = hitTower;
+	}
+
+	
 	
 	
 }

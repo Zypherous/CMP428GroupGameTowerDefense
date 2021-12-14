@@ -8,6 +8,7 @@ public class Tower extends Rect implements Health  {
 	Gun gun2;
 	Gun gun3;
 	Gun [] guns;
+	GameF21 game;
 	int health ;
 	boolean dead = false ; 
 	int x ;
@@ -74,5 +75,11 @@ public class Tower extends Rect implements Health  {
 		for(int i = 0; i < numGuns; i++) {
 			guns[i].setActive(false);
 		}
+	}
+	
+	public void reset() {
+		this.sprite = Toolkit.getDefaultToolkit().getImage("images/tower.png");
+		this.health = 20;
+		this.guns[0].setActive(true);
 	}
 }
