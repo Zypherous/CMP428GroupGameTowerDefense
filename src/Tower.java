@@ -29,7 +29,7 @@ public class Tower extends Rect implements Health  {
 		this.sprite = Toolkit.getDefaultToolkit().getImage("images/tower.png");
 		this.gun = new Gun(this.x + 64, this.y +128, 50 ,0, true , game);
 		this.gun2 = new Gun (this.x + 64, this.y +64, 50 ,0, false, game);
-		this.gun3 = new Gun (this.x + 64, this.y +128, 50 ,0, false, game);
+		this.gun3 = new Gun (this.x + 64, this.y +192, 50 ,0, false, game);
 		this.guns = new Gun[] {gun, gun2, gun3};
 		System.out.print(guns[0].getActive());
 	}

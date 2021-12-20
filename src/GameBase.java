@@ -1,8 +1,13 @@
-import java.awt.*;
-import java.util.*;
-
-import java.awt.event.*;
 import java.applet.Applet;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+
+import java.util.Random;
 
 public abstract class GameBase extends   Applet 
                       implements Runnable, 
@@ -113,10 +118,24 @@ public abstract class GameBase extends   Applet
 
 
 	
-	
-	
-	
-	
+//	public void playMusic() {
+//	 try {
+//         Clip bgm = AudioSystem.getClip();
+//
+//         InputStream is = InputStream.class.getClassLoader().getResourceAsStream("bgm.wav");
+//         AudioInputStream ais = AudioSystem.getAudioInputStream(is);
+//
+//         bgm.open(ais);
+//         bgm.start();
+//         bgm.loop(Clip.LOOP_CONTINUOUSLY);//Music will keep playing
+//
+//         while(true){}
+//
+//     }catch(LineUnavailableException|UnsupportedAudioFileException|IOException e) {
+//         e.printStackTrace();
+//     }
+//	
+//	}	
 	
 	
 	
@@ -135,8 +154,11 @@ public abstract class GameBase extends   Applet
 			{
 			   Thread.sleep(15);
 			}
-			catch(Exception x) {};
+			catch(Exception x) {
+//				System.exit(0);
+			};
 		}
+		
 	}
 	
 	public abstract void inGameLoop();

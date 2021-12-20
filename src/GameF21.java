@@ -4,12 +4,19 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.Timer;
 
 public class GameF21 extends GameBase{
@@ -58,12 +65,15 @@ public class GameF21 extends GameBase{
 		
 		this.numStage = 2;
 		this.waveNum = 1;
+		playMusic("bgm.wav");
 	}	
 	
 	
 	public void inGameLoop(){
 		if(start) {
 			timer.start();
+//			playMusic("bgm.wav");
+			
 			for(int i = 0; i < t.guns.length; i++) {
 				if(pressing[RT]  && t.guns[i].getActive())     t.guns[i].turnRight(3);
 				if(pressing[LT] && t.guns[i].getActive())     t.guns[i].turnLeft(3);
@@ -180,6 +190,7 @@ public class GameF21 extends GameBase{
 					stageNum++;
 					newStage();
 					timer.stop();
+					
 
 				}
 				secondsToNextWave--;
@@ -272,5 +283,35 @@ public class GameF21 extends GameBase{
 		for(int i = 0; i < enemiess.size();i++) {
 			enemiess.get(i).draw(g);
 		}		
+	}
+	
+	public class AudioClip{
+		private final Clip clip;
+		public AudioClip(Clip clip) {
+			this.clip = clip;
+			clip.start();
+		}
+		
+		public void closeClip() {
+			clip.close();
+		}
+	}
+	private Clip getClip(String fileName) {
+		final URL soundFile = GameBase.class.getResource( "/music/" + fileName);
+		try(AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundFile)){
+			final Clip clip = AudioSystem.getClip();
+			clip.open(audioInputStream);
+			clip.setMicrosecondPosition(0);
+			return clip;
+		}catch( UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+			System.out.println(e);
+		}
+		return null;
+	}
+	
+	private void playMusic(String fileName) {
+		final Clip clip = getClip(fileName);
+		final AudioClip audioClip = new AudioClip(clip);
+		clip.loop(Clip.LOOP_CONTINUOUSLY);
 	}
 }
